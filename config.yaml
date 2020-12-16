@@ -1,0 +1,65 @@
+server:
+  port: 5005 # Flask devel server only
+
+opendata:
+  url: https://data-brno-cz-mestobrno.hub.arcgis.com/data.json
+  publisher: https://rpp-opendata.egon.gov.cz/odrpp/zdroj/orgán-veřejné-moci/44992785
+
+cache:
+  timeout: 10
+
+catalog:
+  name:
+    cs: Katalog otevřených dat Brno
+    en: Brno open data catalog
+  description:
+    cs: >
+      Katalog slouží jako centrální databáze všech otevřených datových sad, kterými město Brno a jeho organizace disponují.
+      Obvykle se jedná o data v území města Brna. Katalog může obsahovat také záznamy o neotevřených formátech, jako například .shp.
+      Katalog je dostupný na data.brno.cz.
+    en: >
+      The catalog serves as a central database of all open data sets available in the city of Brno and its organizations.
+      The data is usually spatially situated in the city of Brno. The catalog may also contain records of unopened formats,
+      such as .shp. The catalog is available at data.brno.cz.
+
+mapping:
+  theme:
+    'Bezpečnost l Safety': 'JUST'
+    'Doprava l Transport': 'TRAN'
+    'Ekonomika a trh práce l Economy and Labour Market': 'ECON'
+    'Obyvatelstvo a bydlení l Population': 'SOCI'
+    'Technická infrastruktura l Technical Infrastructure': 'REGI'
+    'Územní plán l Master Plan': 'REGI'
+    'Zdraví a životní prostředí l Health and Environment': 'ENVI'
+    'Historie a kultura l History and Culture': 'EDUC'
+
+  periodicity:
+    '000': 'UNKNOWN'
+    '001': 'CONT'
+    '002': 'DAILY'
+    '003': 'WEEKLY'
+    '004': 'BIWEEKLY'
+    '005': 'MONTHLY'
+    '006': 'QUARTERLY'
+    '007': 'BIENNIAL'
+    '008': 'ANNUAL'
+    '009': 'OTHER'
+    '010': 'IRREG'
+    '011': 'NEVER'
+    '012': 'UNKNOWN'
+
+  media:
+    dgn: application/octet-stream
+    dxf: application/dxf
+    gml: application/gml+xml
+
+  license:
+    'CC0': 'https://creativecommons.org/publicdomain/zero/1.0/'
+    'CC BY': 'https://creativecommons.org/licenses/by/4.0/'
+    'CC BY-SA': 'https://creativecommons.org/licenses/by-sa/4.0/'
+
+license_defaults:
+  'databáze-chráněná-zvláštními-právy': 'https://data.gov.cz/podmínky-užití/není-chráněna-zvláštním-právem-pořizovatele-databáze/'
+  'databáze-jako-autorské-dílo': 'https://data.gov.cz/podmínky-užití/není-autorskoprávně-chráněnou-databází/'
+  'osobní-údaje': 'https://data.gov.cz/podmínky-užití/neobsahuje-osobní-údaje/'
+  #'autorské-dílo': 'https://data.gov.cz/podmínky-užití/neobsahuje-autorská-díla/'
