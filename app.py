@@ -21,17 +21,30 @@ requests_cache.install_cache(expire_after=expire_after, backend='memory')
 
 @app.route('/nkod/index.ttl')
 def index():
+
+    url = request.url
+    url_root = request.url_root
+
+    if config['server']['ssl']:
+        url = url.replace('http://', 'https://')
+        url_root = url_root.replace('http://', 'https://')
+
     src = requests.get(SOURCE_URL).json()
-    return Response(dataset_list(src, request.url, request.url_root, config), mimetype='text/turtle')
+    return Response(dataset_list(src, url, url_root, config), mimetype='text/turtle')
 
 @app.route('/nkod/dataset/<dataset>.ttl')
 def detail(dataset):
     src = requests.get(SOURCE_URL).json()
 
+    url = request.url
+
+    if config['server']['ssl']:
+        url = url.replace('http://', 'https://')
+
     for d in src['dataset']:
         dataset_id = d['identifier'].split('/')[-1]
         if dataset_id == dataset:
-            builder = Builder(d, request.url, config)
+            builder = Builder(d, url, config)
             return Response(builder.create_dataset(), mimetype='text/turtle')
 
     abort(404)

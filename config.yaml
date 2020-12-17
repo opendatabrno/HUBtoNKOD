@@ -1,5 +1,6 @@
 server:
   port: 5005 # Flask devel server only
+  ssl: true
 
 opendata:
   url: https://data-brno-cz-mestobrno.hub.arcgis.com/data.json
