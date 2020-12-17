@@ -75,9 +75,9 @@ class Builder():
             self.g.add((bnode, PU[key], URIRef(url)))
 
 
-        license = find(s,'license')
+        license = find(self.s,'license')
         license_link = self.config['mapping']['license'][license]
-        self.g.add((bnode, PU['autorské-dílo', URIRef(license_link)]))
+        self.g.add((bnode, PU['autorské-dílo'], URIRef(license_link)))
 
         self.g.add((bnode, RDF.type, PU.Specifikace))
         self.g.add((uri, PU.specifikace, bnode))
