@@ -3,7 +3,7 @@ server:
   ssl: true
 
 opendata:
-  url: https://data-brno-cz-mestobrno.hub.arcgis.com/data.json
+  url: https://data.brno.cz/data.json
   publisher: https://rpp-opendata.egon.gov.cz/odrpp/zdroj/orgán-veřejné-moci/44992785
 
 cache:
