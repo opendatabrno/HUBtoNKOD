@@ -149,7 +149,7 @@ class Builder():
 
             self.g.add((uri, DCAT.downloadURL, uri))
             self.g.add((uri, DCAT.accessURL, uri))
-            self.g.add((uri, DCAT.mediaType, Literal(d['mediaType'].replace('/', ':'))))
+            self.g.add((uri, DCAT.mediaType, URIRef(d['mediaType'].replace('/', ':'))))
             self.create_license(uri, source)
 
     def create_online_src(self, value, source):
@@ -176,6 +176,6 @@ class Builder():
             src_type = d.get('orName', '').lower()
             mediaType = types.get(src_type, 'application/octet-stream')
 
-            self.g.add((uri, DCAT.mediaType, Literal('http://www.iana.org/assignments/media-types/{}'.format(mediaType))))
+            self.g.add((uri, DCAT.mediaType, URIRef('http://www.iana.org/assignments/media-types/{}'.format(mediaType))))
 
             self.create_license(uri, source)
