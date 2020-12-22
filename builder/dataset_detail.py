@@ -4,6 +4,7 @@ from rdflib import URIRef, Graph, Literal, Namespace, XSD, BNode
 from rdflib.namespace import DCAT, RDF, DC, FOAF
 from urllib.parse import quote
 from isodate import parse_datetime
+from flask import Markup
 
 DCT = Namespace("http://purl.org/dc/terms/")
 VCARD2006 = Namespace('http://www.w3.org/2006/vcard/ns#')
@@ -48,7 +49,7 @@ class Builder():
 
         g.add((self.uri, RDF.type, DCAT.Dataset))
         g.add((self.uri, DCT.title, Literal(s.get('title'), lang=self.lang)))
-        g.add((self.uri, DCT.description, Literal(s.get('description'), lang=self.lang)))
+        g.add((self.uri, DCT.description, Literal(Markup(s.get('description') or '').striptags(), lang=self.lang)))
         g.add((self.uri, DCT.publisher, URIRef(self.config['opendata']['publisher'])))
 
         for keyword in s.get('keyword', []):
