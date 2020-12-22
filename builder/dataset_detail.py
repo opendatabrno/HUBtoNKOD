@@ -101,7 +101,7 @@ class Builder():
             self.g.add((self.uri, FOAF.page, URIRef(value)))
 
     def map_spatial(self, value):
-        self.g.add((self.uri, DCT.spatial, URIRef('https://linked.cuzk.cz/resource/ruian/')))
+        self.g.add((self.uri, DCT.spatial, URIRef('https://linked.cuzk.cz/resource/ruian/1')))
 
     def map_category(self, value):
         if not type(value) == list:
