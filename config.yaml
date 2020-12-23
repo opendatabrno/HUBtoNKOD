@@ -28,11 +28,11 @@ mapping:
     'Bezpečnost l Safety': 'JUST'
     'Doprava l Transport': 'TRAN'
     'Ekonomika a trh práce l Economy and Labour Market': 'ECON'
-    'Obyvatelstvo a bydlení l Population': 'SOCI'
+    'Obyvatelstvo a bydlení l Population and Housing': 'SOCI'
     'Technická infrastruktura l Technical Infrastructure': 'REGI'
     'Územní plán l Master Plan': 'REGI'
     'Zdraví a životní prostředí l Health and Environment': 'ENVI'
-    'Historie a kultura l History and Culture': 'EDUC'
+    'Kultura a historie l Culture and history': 'EDUC'
 
   periodicity:
     '000': 'UNKNOWN'
