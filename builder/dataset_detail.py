@@ -60,7 +60,7 @@ class Builder():
         self.map_category(s.get('category', []))
         self.map_period(find(s, 'metadata.dataIdInfo.resMaint.maintFreq.MaintFreqCd.@_value'))
         self.map_spatial(find(s, 'metadata.dataIdInfo.dentCode'))
-        self.create_contact(s.get('contactPoint', {}))
+        self.create_contact(find(s, 'metadata.dataIdInfo.idPoC'))
         self.create_distribution(s.get('distribution', []), s)
         self.create_online_src(find(s, 'metadata.distInfo.distTranOps.onLineSrc'), s)
         self.create_documentation(find(s, 'metadata.dataIdInfo.idCitation.otherCitDet'))
@@ -122,20 +122,24 @@ class Builder():
             self.g.add((self.uri, DCT.accrualPeriodicity, uri))
 
     def create_contact(self, value):
-        if 'fn' not in value and 'hasEmail' not in value:
+        email = find(value, 'rpCntInfo.cntAddress.eMailAdd')
+
+        if not email:
             return
 
         contact_uri = URIRef('{}/contact-point'.format(self.url))
 
         self.g.add((self.uri, DCT.contactPoint, contact_uri))
 
-        self.g.add((contact_uri, RDF.type, VCARD2006.Organization))
+        if value.get('rpIndName'):
+            self.g.add((contact_uri, RDF.type, VCARD2006.Individual))
+            self.g.add((contact_uri, VCARD2006.fn, Literal(value.get('rpIndName'), lang='cs')))
+        elif value.get('rpOrgName'):
+            self.g.add((contact_uri, RDF.type, VCARD2006.Organization))
+            self.g.add((contact_uri, VCARD2006.fn, Literal(value.get('rpOrgName'), lang='cs')))
 
-        if 'fn' in value:
-            self.g.add((contact_uri, VCARD2006.fn, Literal(value['fn'], lang='cs')))
+        self.g.add((contact_uri, VCARD2006.hasEmail, Literal(email)))
 
-        if 'hasEmail' in value:
-            self.g.add((contact_uri, VCARD2006.hasEmail, Literal(value['hasEmail'])))
 
     def create_distribution(self, value, source):
         for d in value:
