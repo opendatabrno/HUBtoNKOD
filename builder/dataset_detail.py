@@ -26,13 +26,14 @@ def quote_url(url):
 
 class Builder():
 
-    def __init__(self, source, uri, config):
+    def __init__(self, source, uri, config, types_matcher):
         self.g = Graph()
         self.s = source
         self.url = uri
         self.uri = URIRef(uri)
         self.lang = 'cs'
         self.config = config
+        self.types_matcher = types_matcher
 
     def create_dataset(self):
         g = self.g
@@ -154,6 +155,10 @@ class Builder():
             self.g.add((uri, DCAT.downloadURL, uri))
             self.g.add((uri, DCAT.accessURL, uri))
             self.g.add((uri, DCAT.mediaType, URIRef('http://www.iana.org/assignments/media-types/{}'.format(d['mediaType']))))
+
+            fmt = self.types_matcher.find_match(d['format'], d['mediaType'])
+            self.g.add((uri, DCT['format'], URIRef(fmt)))
+
             self.create_license(uri, source)
 
     def create_online_src(self, value, source):
@@ -181,5 +186,6 @@ class Builder():
             mediaType = types.get(src_type, 'application/octet-stream')
 
             self.g.add((uri, DCAT.mediaType, URIRef('http://www.iana.org/assignments/media-types/{}'.format(mediaType))))
+            self.g.add((uri, DCT['format'], URIRef('http://publications.europa.eu/resource/authority/file-type/OCTET')))
 
             self.create_license(uri, source)
