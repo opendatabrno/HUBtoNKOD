@@ -81,6 +81,10 @@ class Builder():
         license_link = self.config['mapping']['license'][license]
         self.g.add((bnode, PU['autorské-dílo'], URIRef(license_link)))
 
+        author = find(source, 'publisher.source')
+        if author:
+            self.g.add((bnode, PU.autor, Literal(author)))
+
         self.g.add((bnode, RDF.type, PU.Specifikace))
         self.g.add((uri, PU.specifikace, bnode))
 
