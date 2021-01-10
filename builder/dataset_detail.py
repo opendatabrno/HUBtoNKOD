@@ -153,7 +153,7 @@ class Builder():
 
             self.g.add((uri, DCAT.downloadURL, uri))
             self.g.add((uri, DCAT.accessURL, uri))
-            self.g.add((uri, DCAT.mediaType, URIRef(d['mediaType'].replace('/', ':'))))
+            self.g.add((uri, DCAT.mediaType, URIRef('http://www.iana.org/assignments/media-types/{}'.format(d['mediaType']))))
             self.create_license(uri, source)
 
     def create_online_src(self, value, source):
