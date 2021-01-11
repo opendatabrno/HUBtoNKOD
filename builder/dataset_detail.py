@@ -178,6 +178,19 @@ class Builder():
             if not 'linkage' in d:
                 continue
 
+            if d['linkage'].endswith('FeatureServer') and 'orName' not in d:
+                fmt = 'REST'
+                mime = 'application/json'
+
+            if 'orName' in d:
+                name = d['orName'].split('(')[0].split('-')[0].strip()
+
+                if name in types:
+                    fmt = types[name]['format']
+                    mime = types[name]['mime']
+                else:
+                    continue
+
             uri = URIRef(quote_url(d['linkage']))
 
             self.g.add((self.uri, DCAT.Distribution, uri))
@@ -186,10 +199,7 @@ class Builder():
             self.g.add((uri, DCAT.downloadURL, uri))
             self.g.add((uri, DCAT.accessURL, uri))
 
-            src_type = d.get('orName', '').lower()
-            mediaType = types.get(src_type, 'application/octet-stream')
-
-            self.g.add((uri, DCAT.mediaType, URIRef('http://www.iana.org/assignments/media-types/{}'.format(mediaType))))
-            self.g.add((uri, DCT['format'], URIRef('http://publications.europa.eu/resource/authority/file-type/OCTET')))
+            self.g.add((uri, DCAT.mediaType, URIRef('http://www.iana.org/assignments/media-types/{}'.format(mime))))
+            self.g.add((uri, DCT['format'], URIRef('http://publications.europa.eu/resource/authority/file-type/{}'.format(fmt))))
 
             self.create_license(uri, source)

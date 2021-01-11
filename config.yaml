@@ -50,9 +50,30 @@ mapping:
     '012': 'UNKNOWN'
 
   media:
-    dgn: application/octet-stream
-    dxf: application/dxf
-    gml: application/gml+xml
+    DWG:
+      mime: application/acad
+      format: OCTET
+    DGN:
+      mime: application/acad
+      format: OCTET
+    DXF:
+      mime: application/dxf
+      format: OCTET
+    SHP:
+      mime: application/zip
+      format: SHP
+    GML:
+      mime: text/sgml
+      format: GML
+    CSV:
+      mime: text/csv
+      format: CSV
+    GeoJSON:
+      mime: application/json
+      format: GEOJSON
+    TIFF:
+      mime: image/tiff
+      format: TIFF
 
   license:
     'CC0': 'https://creativecommons.org/publicdomain/zero/1.0/'
