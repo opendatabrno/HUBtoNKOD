@@ -75,6 +75,9 @@ mapping:
       mime: image/tiff
       format: TIFF
 
+  ignore_format:
+    - "Web Page"
+
   license:
     'CC0': 'https://creativecommons.org/publicdomain/zero/1.0/'
     'CC BY': 'https://creativecommons.org/licenses/by/4.0/'

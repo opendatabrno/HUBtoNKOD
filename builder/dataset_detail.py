@@ -151,6 +151,9 @@ class Builder():
             if not 'accessURL' in d:
                 continue
 
+            if d['format'] in self.config['mapping']['ignore_format']:
+                continue
+
             uri = URIRef(quote_url(d['accessURL']))
 
             self.g.add((self.uri, DCAT.Distribution, uri))
