@@ -62,6 +62,9 @@ mapping:
     SHP:
       mime: application/zip
       format: SHP
+    ShapeFile:
+      mime: application/zip
+      format: SHP
     GML:
       mime: text/sgml
       format: GML
