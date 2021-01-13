@@ -156,8 +156,8 @@ class Builder():
 
             uri = URIRef(quote_url(d['accessURL']))
 
-            self.g.add((self.uri, DCAT.Distribution, uri))
-            self.g.add((uri, RDF.type, DCAT.Distribution))
+            self.g.add((self.uri, DCAT.distribution, uri))
+            self.g.add((uri, RDF.type, DCAT.distribution))
 
             self.g.add((uri, DCAT.downloadURL, uri))
             self.g.add((uri, DCAT.accessURL, uri))
@@ -196,8 +196,8 @@ class Builder():
 
             uri = URIRef(quote_url(d['linkage']))
 
-            self.g.add((self.uri, DCAT.Distribution, uri))
-            self.g.add((uri, RDF.type, DCAT.Distribution))
+            self.g.add((self.uri, DCAT.distribution, uri))
+            self.g.add((uri, RDF.type, DCAT.distribution))
 
             self.g.add((uri, DCAT.downloadURL, uri))
             self.g.add((uri, DCAT.accessURL, uri))
