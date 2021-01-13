@@ -83,7 +83,7 @@ class Builder():
 
         author = find(source, 'publisher.source')
         if author:
-            self.g.add((bnode, PU.autor, Literal(author)))
+            self.g.add((bnode, PU.autor, Literal(author, lang='cs')))
 
         self.g.add((bnode, RDF.type, PU.Specifikace))
         self.g.add((uri, PU.specifikace, bnode))
