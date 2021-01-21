@@ -96,3 +96,7 @@ license_defaults:
   'databáze-jako-autorské-dílo': 'https://data.gov.cz/podmínky-užití/není-autorskoprávně-chráněnou-databází/'
   'osobní-údaje': 'https://data.gov.cz/podmínky-užití/neobsahuje-osobní-údaje/'
   #'autorské-dílo': 'https://data.gov.cz/podmínky-užití/neobsahuje-autorská-díla/'
+
+defaults:
+  contact_email: data@brno.cz
+  contact_name: Mgr. Jan Zvara, Ph.D.
