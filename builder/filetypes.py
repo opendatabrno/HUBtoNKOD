@@ -7,15 +7,19 @@ class TypeMatcher():
         return 'http://publications.europa.eu/resource/authority/file-type/{}'.format(code)
 
     def find_match(self, name, mimetype):
-        by_name = self.mapping.xpath('.//lg.version[@lg="eng"][normalize-space()=$name]/ancestor::record', name=name)
-        if by_name:
-            authority = by_name[0].find('authority-code').text
-            return self.make_url(authority)
+        # first search by name, then by mimetype
+        xpaths = [
+            ('.//lg.version[@lg="eng"][normalize-space()=$param]/ancestor::record', name),
+            ('.//internet-media-type[normalize-space()=$param]/ancestor::record', mimetype),
+        ]
 
-        by_mime = self.mapping.xpath('.//internet-media-type[normalize-space()=$mime]/ancestor::record', mime=mimetype)
-        if by_mime:
-            authority = by_mime[0].find('authority-code').text
-            return self.make_url(authority)
+        for xpath in xpaths:
+            search = self.mapping.xpath(xpath[0], param=xpath[1])
+            if search:
+                authority = search[0].find('authority-code').text
+                is_compressed = search[0].find('is-compressedFormat')
+                compressed = is_compressed is not None and is_compressed.text == "true"
+                return self.make_url(authority), compressed
 
-        return make_url('OCTET')
+        return self.make_url('OCTET'), False
 

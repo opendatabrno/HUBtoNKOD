@@ -165,8 +165,11 @@ class Builder():
             self.g.add((uri, DCAT.accessURL, uri))
             self.g.add((uri, DCAT.mediaType, URIRef('http://www.iana.org/assignments/media-types/{}'.format(d['mediaType']))))
 
-            fmt = self.types_matcher.find_match(d['format'], d['mediaType'])
+            fmt, compressed = self.types_matcher.find_match(d['format'], d['mediaType'])
             self.g.add((uri, DCT['format'], URIRef(fmt)))
+
+            if compressed:
+                self.g.add((uri, DCAT.compressFormat, URIRef('http://www.iana.org/assignments/media-types/{}'.format(d['mediaType']))))
 
             self.create_license(uri, source)
 
@@ -206,5 +209,13 @@ class Builder():
 
             self.g.add((uri, DCAT.mediaType, URIRef('http://www.iana.org/assignments/media-types/{}'.format(mime))))
             self.g.add((uri, DCT['format'], URIRef('http://publications.europa.eu/resource/authority/file-type/{}'.format(fmt))))
+
+            fmt, compressed = self.types_matcher.find_match(None, mime)
+            if compressed:
+                self.g.add((uri, DCAT.compressFormat, URIRef('http://www.iana.org/assignments/media-types/{}'.format(mime))))
+
+            # last attempt to recognize compression
+            if not compressed and d['linkage'].endswith('.zip') :
+                self.g.add((uri, DCAT.compressFormat, URIRef('http://www.iana.org/assignments/media-types/application/zip')))
 
             self.create_license(uri, source)
