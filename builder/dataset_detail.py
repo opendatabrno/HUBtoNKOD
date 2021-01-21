@@ -60,7 +60,7 @@ class Builder():
         self.create_publisher(find(s, 'publisher.name'))
         self.map_category(s.get('category', []))
         self.map_period(find(s, 'metadata.dataIdInfo.resMaint.maintFreq.MaintFreqCd.@_value'))
-        self.map_spatial(find(s, 'metadata.dataIdInfo.dentCode'))
+        self.map_spatial(find(s, 'metadata.dataIdInfo.dataExt.geoEle.GeoDesc.geoId.identCode'))
         self.create_contact(find(s, 'metadata.dataIdInfo.idPoC'))
         self.create_distribution(s.get('distribution', []), s)
         self.create_online_src(find(s, 'metadata.distInfo.distTranOps.onLineSrc'), s)
@@ -106,7 +106,9 @@ class Builder():
             self.g.add((self.uri, FOAF.page, URIRef(value)))
 
     def map_spatial(self, value):
-        self.g.add((self.uri, DCT.spatial, URIRef('https://linked.cuzk.cz/resource/ruian/1')))
+        if value:
+            _type = self.config['mapping']['ruian'][value]
+            self.g.add((self.uri, DCT.spatial, URIRef('https://linked.cuzk.cz/resource/ruian/{}/{}'.format(_type, value))))
 
     def map_category(self, value):
         if not type(value) == list:

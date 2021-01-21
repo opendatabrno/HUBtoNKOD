@@ -86,6 +86,11 @@ mapping:
     'CC BY': 'https://creativecommons.org/licenses/by/4.0/'
     'CC BY-SA': 'https://creativecommons.org/licenses/by-sa/4.0/'
 
+  ruian:
+    582786: obec
+    116: kraj
+    1: stat
+
 license_defaults:
   'databáze-chráněná-zvláštními-právy': 'https://data.gov.cz/podmínky-užití/není-chráněna-zvláštním-právem-pořizovatele-databáze/'
   'databáze-jako-autorské-dílo': 'https://data.gov.cz/podmínky-užití/není-autorskoprávně-chráněnou-databází/'
