@@ -100,3 +100,6 @@ license_defaults:
 defaults:
   contact_email: data@brno.cz
   contact_name: Mgr. Jan Zvara, Ph.D.
+
+strings:
+  documentation_link: zde
