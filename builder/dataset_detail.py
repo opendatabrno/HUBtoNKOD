@@ -52,7 +52,12 @@ class Builder():
         src_uri = URIRef(self.uri)
 
         g.add((self.uri, RDF.type, DCAT.Dataset))
-        g.add((self.uri, DCT.title, Literal(s.get('title'), lang=self.lang)))
+        title = s.get('title').split('/')
+        g.add((self.uri, DCT.title, Literal(title[0].strip(), lang=self.lang)))
+
+        if len(title) > 1:
+            g.add((self.uri, DCT.title, Literal(title[1].strip(), lang='en')))
+
         g.add((self.uri, DCT.description, Literal(Markup(s.get('description') or '').striptags(), lang=self.lang)))
         g.add((self.uri, DCT.publisher, URIRef(self.config['opendata']['publisher'])))
 
