@@ -177,6 +177,13 @@ class Builder():
 
             uri = URIRef(quote_url(d['accessURL']))
 
+            if d['format'] == 'Esri REST':
+                self.g.add((self.uri, DCAT.dataService, uri))
+                self.g.add((uri, RDF.type, DCAT.DataService))
+                self.g.add((uri, DCT.title, Literal(d['title'], lang=self.lang)))
+                self.g.add((uri, DCAT.endpointURL, uri))
+                continue
+
             self.g.add((self.uri, DCAT.distribution, uri))
             self.g.add((uri, RDF.type, DCAT.Distribution))
 
@@ -205,9 +212,14 @@ class Builder():
             if not 'linkage' in d:
                 continue
 
+            uri = URIRef(quote_url(d['linkage']))
+
             if d['linkage'].endswith('FeatureServer') and 'orName' not in d:
-                fmt = 'REST'
-                mime = 'application/json'
+                self.g.add((self.uri, DCAT.dataService, uri))
+                self.g.add((uri, RDF.type, DCAT.DataService))
+                self.g.add((uri, DCT.title, Literal('Esri Rest API', lang=self.lang)))
+                self.g.add((uri, DCAT.endpointURL, uri))
+                continue
 
             if 'orName' in d:
                 name = d['orName'].split('(')[0].split('-')[0].strip()
@@ -218,7 +230,6 @@ class Builder():
                 else:
                     continue
 
-            uri = URIRef(quote_url(d['linkage']))
 
             self.g.add((self.uri, DCAT.distribution, uri))
             self.g.add((uri, RDF.type, DCAT.Distribution))
