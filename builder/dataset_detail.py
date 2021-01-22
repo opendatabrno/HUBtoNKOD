@@ -182,6 +182,7 @@ class Builder():
                 self.g.add((uri, RDF.type, DCAT.DataService))
                 self.g.add((uri, DCT.title, Literal(d['title'], lang=self.lang)))
                 self.g.add((uri, DCAT.endpointURL, uri))
+                self.g.add((uri, DCT.conformsTo, URIRef('urn:x-esri:serviceType:ArcGIS')))
                 continue
 
             self.g.add((self.uri, DCAT.distribution, uri))
@@ -219,6 +220,7 @@ class Builder():
                 self.g.add((uri, RDF.type, DCAT.DataService))
                 self.g.add((uri, DCT.title, Literal('Esri Rest API', lang=self.lang)))
                 self.g.add((uri, DCAT.endpointURL, uri))
+                self.g.add((uri, DCT.conformsTo, URIRef('urn:x-esri:serviceType:ArcGIS')))
                 continue
 
             if 'orName' in d:
