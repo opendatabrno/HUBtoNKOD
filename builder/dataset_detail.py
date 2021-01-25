@@ -72,7 +72,7 @@ class Builder():
         self.create_contact(find(s, 'metadata.dataIdInfo.idPoC'))
         self.create_distribution(s.get('distribution', []), s)
         self.create_online_src(find(s, 'metadata.distInfo.distTranOps.onLineSrc'), s)
-        self.create_documentation(find(s, 'metadata.dataIdInfo.idCitation.otherCitDet'), s.get('description') or '')
+        self.create_documentation(find(s, 'landingPage'), s.get('description') or '')
 
         return self.g.serialize(format='turtle').decode()
 
@@ -97,16 +97,16 @@ class Builder():
         self.g.add((uri, PU.specifikace, bnode))
 
     def create_documentation(self, value, description):
-        if value:
-            self.g.add((self.uri, FOAF.page, URIRef(value)))
-
         # search dataset description for extra link to documentation
         soup = BeautifulSoup(description, features='html.parser')
         link = soup.find('a', text=re.compile(self.config['strings']['documentation_link'], re.I))
 
         if link:
             self.g.add((self.uri, FOAF.page, URIRef(link['href'])))
+            return
 
+        if value:
+            self.g.add((self.uri, FOAF.page, URIRef(value)))
 
     def create_modified(self, value):
         if value:
