@@ -10,7 +10,7 @@ import re
 
 
 DCT = Namespace("http://purl.org/dc/terms/")
-VCARD = Namespace('http://www.w3.org/2006/vcard/ns#')
+VCARD2006 = Namespace('http://www.w3.org/2006/vcard/ns#')
 PU = Namespace('https://data.gov.cz/slovník/podmínky-užití/')
 
 def find(element, path):
@@ -45,7 +45,7 @@ class Builder():
         g.bind('dcat', DCAT)
         g.bind('dc', DC)
         g.bind('dct', DCT)
-        g.bind('vcard', VCARD)
+        g.bind('vcard2006', VCARD2006)
         g.bind('foaf', FOAF)
         g.bind('pu', PU)
 
@@ -150,21 +150,20 @@ class Builder():
         if not email:
             email = self.config['defaults']['contact_email']
 
-        contact_uri = URIRef('{}/contact-point'.format(self.url))
-
-        self.g.add((self.uri, DCT.contactPoint, contact_uri))
+        bnode = BNode()
 
         if value.get('rpIndName'):
-            self.g.add((contact_uri, RDF.type, VCARD.Individual))
-            self.g.add((contact_uri, VCARD.fn, Literal(value.get('rpIndName'), lang='cs')))
+            self.g.add((bnode, RDF.type, VCARD2006.Individual))
+            self.g.add((bnode, VCARD2006.fn, Literal(value.get('rpIndName'), lang='cs')))
         elif value.get('rpOrgName'):
-            self.g.add((contact_uri, RDF.type, VCARD.Organization))
-            self.g.add((contact_uri, VCARD.fn, Literal(value.get('rpOrgName'), lang='cs')))
+            self.g.add((bnode, RDF.type, VCARD2006.Organization))
+            self.g.add((bnode, VCARD2006.fn, Literal(value.get('rpOrgName'), lang='cs')))
         else:
-            self.g.add((contact_uri, RDF.type, VCARD.Individual))
-            self.g.add((contact_uri, VCARD.fn, Literal(self.config['defaults']['contact_email'], lang='cs')))
+            self.g.add((bnode, RDF.type, VCARD2006.Individual))
+            self.g.add((bnode, VCARD2006.fn, Literal(self.config['defaults']['contact_email'], lang='cs')))
 
-        self.g.add((contact_uri, VCARD.hasEmail, Literal(email)))
+        self.g.add((bnode, VCARD2006.hasEmail, Literal(email)))
+        self.g.add((self.uri, DCAT.contactPoint, bnode))
 
 
     def create_distribution(self, value, source):
