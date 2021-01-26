@@ -88,7 +88,7 @@ mapping:
 
   ruian:
     582786: obec
-    116: kraj-1960
+    116: vusc
     1: stat
 
 license_defaults:
