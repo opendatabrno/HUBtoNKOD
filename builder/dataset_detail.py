@@ -177,12 +177,12 @@ class Builder():
             uri = URIRef(quote_url(d['accessURL']))
 
             if d['format'] == 'Esri REST':
-                self.g.add((self.uri, DCAT.dataService, uri))
-                self.g.add((uri, RDF.type, DCAT.DataService))
-                self.g.add((uri, DCT.title, Literal(d['title'], lang=self.lang)))
-                self.g.add((uri, DCAT.endpointURL, uri))
-                self.g.add((uri, DCT.conformsTo, URIRef('urn:x-esri:serviceType:ArcGIS')))
-                continue
+                bnode = BNode()
+                self.g.add((bnode, RDF.type, DCAT.DataService))
+                self.g.add((bnode, DCT.title, Literal(d['title'], lang=self.lang)))
+                self.g.add((bnode, DCAT.endpointURL, uri))
+                self.g.add((bnode, DCT.conformsTo, URIRef('urn:x-esri:serviceType:ArcGIS')))
+                self.g.add((uri, DCAT.accessService, bnode))
 
             self.g.add((self.uri, DCAT.distribution, uri))
             self.g.add((uri, RDF.type, DCAT.Distribution))
@@ -215,12 +215,15 @@ class Builder():
             uri = URIRef(quote_url(d['linkage']))
 
             if d['linkage'].endswith('FeatureServer') and 'orName' not in d:
-                self.g.add((self.uri, DCAT.dataService, uri))
-                self.g.add((uri, RDF.type, DCAT.DataService))
-                self.g.add((uri, DCT.title, Literal('Esri Rest API', lang=self.lang)))
-                self.g.add((uri, DCAT.endpointURL, uri))
-                self.g.add((uri, DCT.conformsTo, URIRef('urn:x-esri:serviceType:ArcGIS')))
-                continue
+                fmt = 'REST'
+                mime = 'application/json'
+                bnode = BNode()
+                self.g.add((bnode, RDF.type, DCAT.DataService))
+                self.g.add((bnode, DCT.title, Literal('Esri Rest API', lang=self.lang)))
+                self.g.add((bnode, DCAT.endpointURL, uri))
+                self.g.add((bnode, DCT.conformsTo, URIRef('urn:x-esri:serviceType:ArcGIS')))
+                self.g.add((uri, DCAT.accessService, bnode))
+
 
             if 'orName' in d:
                 name = d['orName'].split('(')[0].split('-')[0].strip()
