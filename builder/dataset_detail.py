@@ -175,19 +175,23 @@ class Builder():
                 continue
 
             uri = URIRef(quote_url(d['accessURL']))
+            is_service = False
 
             if d['format'] == 'Esri REST':
-                bnode = BNode()
-                self.g.add((bnode, RDF.type, DCAT.DataService))
-                self.g.add((bnode, DCT.title, Literal(d['title'], lang=self.lang)))
-                self.g.add((bnode, DCAT.endpointURL, uri))
-                self.g.add((bnode, DCT.conformsTo, URIRef('urn:x-esri:serviceType:ArcGIS')))
-                self.g.add((uri, DCAT.accessService, bnode))
+                is_service = True
+                access_uri = uri + '/service'
+                self.g.add((uri, DCAT.accessService, access_uri))
+                self.g.add((access_uri, RDF.type, DCAT.DataService))
+                self.g.add((access_uri, DCT.title, Literal(d['title'], lang=self.lang)))
+                self.g.add((access_uri, DCAT.endpointURL, uri))
+                self.g.add((access_uri, DCT.conformsTo, URIRef('urn:x-esri:serviceType:ArcGIS')))
 
             self.g.add((self.uri, DCAT.distribution, uri))
             self.g.add((uri, RDF.type, DCAT.Distribution))
 
-            self.g.add((uri, DCAT.downloadURL, uri))
+            if not is_service:
+                self.g.add((uri, DCAT.downloadURL, uri))
+
             self.g.add((uri, DCAT.accessURL, uri))
             self.g.add((uri, DCAT.mediaType, URIRef('http://www.iana.org/assignments/media-types/{}'.format(d['mediaType']))))
 
@@ -213,16 +217,18 @@ class Builder():
                 continue
 
             uri = URIRef(quote_url(d['linkage']))
+            is_service = False
 
             if d['linkage'].endswith('FeatureServer') and 'orName' not in d:
                 fmt = 'REST'
                 mime = 'application/json'
-                bnode = BNode()
-                self.g.add((bnode, RDF.type, DCAT.DataService))
-                self.g.add((bnode, DCT.title, Literal('Esri Rest API', lang=self.lang)))
-                self.g.add((bnode, DCAT.endpointURL, uri))
-                self.g.add((bnode, DCT.conformsTo, URIRef('urn:x-esri:serviceType:ArcGIS')))
-                self.g.add((uri, DCAT.accessService, bnode))
+                accces_uri = self.uri + '/service'
+                is_service = True
+                self.g.add((uri, DCAT.accessService, accces_uri))
+                self.g.add((accces_uri, RDF.type, DCAT.DataService))
+                self.g.add((accces_uri, DCT.title, Literal('Esri Rest API', lang=self.lang)))
+                self.g.add((accces_uri, DCAT.endpointURL, uri))
+                self.g.add((accces_uri, DCT.conformsTo, URIRef('urn:x-esri:serviceType:ArcGIS')))
 
 
             if 'orName' in d:
@@ -238,7 +244,9 @@ class Builder():
             self.g.add((self.uri, DCAT.distribution, uri))
             self.g.add((uri, RDF.type, DCAT.Distribution))
 
-            self.g.add((uri, DCAT.downloadURL, uri))
+            if not is_service:
+                self.g.add((uri, DCAT.downloadURL, uri))
+
             self.g.add((uri, DCAT.accessURL, uri))
 
             self.g.add((uri, DCAT.mediaType, URIRef('http://www.iana.org/assignments/media-types/{}'.format(mime))))
