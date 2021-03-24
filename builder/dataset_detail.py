@@ -145,6 +145,9 @@ class Builder():
             self.g.add((self.uri, DCT.accrualPeriodicity, uri))
 
     def create_contact(self, value):
+        if not value:
+            return
+
         email = find(value, 'rpCntInfo.cntAddress.eMailAdd')
 
         if not email:
