@@ -222,6 +222,7 @@ class Builder():
             uri = URIRef(quote_url(d['linkage']))
             is_service = False
             mime = 'application/octet-stream'
+            fmt = 'REST'
 
             if d['linkage'].endswith('FeatureServer') and 'orName' not in d:
                 fmt = 'REST'
