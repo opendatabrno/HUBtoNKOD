@@ -195,14 +195,25 @@ class Builder():
             if not is_service:
                 self.g.add((uri, DCAT.downloadURL, uri))
 
-            self.g.add((uri, DCAT.accessURL, uri))
-            self.g.add((uri, DCAT.mediaType, URIRef('http://www.iana.org/assignments/media-types/{}'.format(d['mediaType']))))
+            # Temporary fix (bug in source system)
+            mediaType = d.get('mediaType')
 
-            fmt, compressed = self.types_matcher.find_match(d['format'], d['mediaType'])
+            if not mediaType:
+                if d['format'] and re.match('^\w+/[\w+]+$', d['format']):
+                    mediaType = d['format']
+                elif 'description' in d:
+                    mediaType = d['description']
+                else:
+                    mediaType = 'application/octet-stream'
+
+            self.g.add((uri, DCAT.accessURL, uri))
+            self.g.add((uri, DCAT.mediaType, URIRef('http://www.iana.org/assignments/media-types/{}'.format(mediaType))))
+
+            fmt, compressed = self.types_matcher.find_match(d['format'], mediaType)
             self.g.add((uri, DCT['format'], URIRef(fmt)))
 
             if compressed:
-                self.g.add((uri, DCAT.compressFormat, URIRef('http://www.iana.org/assignments/media-types/{}'.format(d['mediaType']))))
+                self.g.add((uri, DCAT.compressFormat, URIRef('http://www.iana.org/assignments/media-types/{}'.format(mediaType))))
 
             self.create_license(uri, source)
 
