@@ -7,6 +7,8 @@ from builder.filetypes import TypeMatcher
 from datetime import timedelta
 from yaml import load, SafeLoader
 import lxml.etree as ET
+from functools import wraps
+from werkzeug.exceptions import NotAcceptable
 
 app = Flask(__name__)
 
@@ -23,8 +25,39 @@ with ET.open('filetypes.xml', 'r') as x:
     filetypes_src = ET.parse(x)
     types_matcher = TypeMatcher(filetypes_src)
 
-@app.route('/nkod/index.ttl')
-def index():
+
+ext_mapping = {
+    'ttl': {'mime': 'text/turtle', 'format': 'turtle'},
+    'jsonld': {'mime': 'application/ld+json', 'format': 'json-ld'},
+    'json': {'mime': 'application/json', 'format': 'json-ld'}
+}
+mime_mapping = {m['mime']: m['format'] for m in ext_mapping.values()}
+
+def mime_choose(fn):
+    @wraps(fn)
+    def wrapper(*args, **kwargs):
+        ext = kwargs.get('extension', None)
+
+        if ext in ext_mapping:
+            t = ext_mapping[ext]
+            return fn(*args, return_mime=t['mime'], format=t['format'],**kwargs)
+        elif request.accept_mimetypes.values():
+            for mimetype in request.accept_mimetypes.values():
+                if mimetype in mime_mapping:
+                    format = mime_mapping[mimetype]
+                    return fn(*args, return_mime=mimetype, format=format,**kwargs)
+                if mimetype == '*/*':
+                    return fn(*args, return_mime='text/turtle', format='turtle',**kwargs)
+            raise NotAcceptable
+        else:
+            raise NotAcceptable
+
+    return wrapper
+
+@app.route('/nkod/index.<extension>')
+@app.route('/nkod/index', defaults={'extension': ''})
+@mime_choose
+def index(return_mime, format, extension):
 
     url = request.url
     url_root = request.url_root
@@ -34,10 +67,15 @@ def index():
         url_root = url_root.replace('http://', 'https://')
 
     src = requests.get(SOURCE_URL).json()
-    return Response(dataset_list(src, url, url_root, config), mimetype='text/turtle')
+    ext = '.' + extension if extension else ''
+    res = dataset_list(src, url, url_root, config, ext)
+    return Response(res.serialize(format=format).decode(), mimetype=return_mime)
 
-@app.route('/nkod/dataset/<dataset>.ttl')
-def detail(dataset):
+@app.route('/nkod/dataset/<dataset>.<extension>')
+@app.route('/nkod/dataset/<dataset>', defaults={'extension': ''})
+
+@mime_choose
+def detail(dataset, return_mime, format, extension):
     src = requests.get(SOURCE_URL).json()
 
     url = request.url
@@ -48,8 +86,8 @@ def detail(dataset):
     for d in src['dataset']:
         dataset_id = d['identifier'].split('/')[-1]
         if dataset_id == dataset:
-            builder = Builder(d, url, config, types_matcher)
-            return Response(builder.create_dataset(), mimetype='text/turtle')
+            builder = Builder(d, url, config, types_matcher).create_dataset()
+            return Response(builder.serialize(format=format).decode(), mimetype=return_mime)
 
     abort(404)
 

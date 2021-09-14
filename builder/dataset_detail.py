@@ -74,7 +74,7 @@ class Builder():
         self.create_online_src(find(s, 'metadata.distInfo.distTranOps.onLineSrc'), s)
         self.create_documentation(find(s, 'landingPage'), s.get('description') or '')
 
-        return self.g.serialize(format='turtle').decode()
+        return self.g
 
 
     def create_license(self, uri, source):

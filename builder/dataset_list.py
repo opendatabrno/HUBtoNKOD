@@ -4,7 +4,7 @@ from builder.dataset_detail import find
 
 DCT = Namespace("http://purl.org/dc/terms/")
 
-def dataset_list(src, url, base, config):
+def dataset_list(src, url, base, config, extension):
 
     def has_distributions(d):
         return 'accessURL' in d \
@@ -39,7 +39,7 @@ def dataset_list(src, url, base, config):
             continue
 
         dataset_id = dataset['identifier'].split('/')[-1]
-        dataset_uri = '{}nkod/dataset/{}.ttl'.format(base, dataset_id)
+        dataset_uri = '{}nkod/dataset/{}{}'.format(base, dataset_id, extension)
         g.add((uri, DCAT.dataset, URIRef(dataset_uri)))
 
-    return g.serialize(format='turtle').decode()
+    return g
