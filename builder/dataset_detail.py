@@ -148,6 +148,9 @@ class Builder():
         if not value:
             return
 
+        if type(value) == list:
+            value = value[0]
+
         email = find(value, 'rpCntInfo.cntAddress.eMailAdd')
 
         if not email:
