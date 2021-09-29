@@ -4,11 +4,13 @@ from flask import Flask, Response, request, abort
 from builder.dataset_list import *
 from builder.dataset_detail import Builder
 from builder.filetypes import TypeMatcher
+from builder.event import build_event
 from datetime import timedelta
 from yaml import load, SafeLoader
 import lxml.etree as ET
 from functools import wraps
 from werkzeug.exceptions import NotAcceptable
+from json import dumps
 
 app = Flask(__name__)
 
@@ -69,7 +71,7 @@ def index(return_mime, format, extension):
     src = requests.get(SOURCE_URL).json()
     ext = '.' + extension if extension else ''
     res = dataset_list(src, url, url_root, config, ext)
-    return Response(res.serialize(format=format).decode(), mimetype=return_mime)
+    return Response(res.serialize(format=format), mimetype=return_mime)
 
 @app.route('/nkod/dataset/<dataset>.<extension>')
 @app.route('/nkod/dataset/<dataset>', defaults={'extension': ''})
@@ -87,9 +89,22 @@ def detail(dataset, return_mime, format, extension):
         dataset_id = d['identifier'].split('/')[-1]
         if dataset_id == dataset:
             builder = Builder(d, url, config, types_matcher).create_dataset()
-            return Response(builder.serialize(format=format).decode(), mimetype=return_mime)
+            return Response(builder.serialize(format=format), mimetype=return_mime)
 
     abort(404)
+
+@app.route('/nkod/ofn/events.json')
+def events():
+    url = config['ofn']['events']['url']
+    src = requests.get(url).json()
+
+    res = []
+
+    for item in src.get('features'):
+        res.append(build_event(item.get('attributes'), types_matcher))
+
+    return Response(dumps(res, ensure_ascii=False), mimetype='application/json')
+
 
 if __name__ == '__main__':
     app.run(port=config['server']['port'])

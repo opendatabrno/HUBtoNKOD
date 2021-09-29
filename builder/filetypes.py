@@ -23,3 +23,13 @@ class TypeMatcher():
 
         return self.make_url('OCTET'), False
 
+    def match_by_extension(self, ext):
+        xpath = './/file-extension[normalize-space()=$param]/ancestor::record'
+
+        search = self.mapping.xpath(xpath, param=ext)
+        if search:
+            type = search[0].find('internet-media-type').text
+            return 'https://www.iana.org/assignments/media-types/{}'.format(type)
+
+        return 'https://www.iana.org/assignments/media-types/{}'.format('application/octet-stream')
+

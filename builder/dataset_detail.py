@@ -72,10 +72,9 @@ class Builder():
         self.create_contact(find(s, 'metadata.dataIdInfo.idPoC'))
         self.create_distribution(s.get('distribution', []), s)
         self.create_online_src(find(s, 'metadata.distInfo.distTranOps.onLineSrc'), s)
-        self.create_documentation(find(s, 'landingPage'), s.get('description') or '')
+        self.create_documentation(find(s, 'metadata.dataIdInfo.idCitation.otherCitDet') or find(s, 'landingPage'))
 
         return self.g
-
 
     def create_license(self, uri, source):
         license_defaults = self.config['license_defaults']
@@ -96,15 +95,7 @@ class Builder():
         self.g.add((bnode, RDF.type, PU.Specifikace))
         self.g.add((uri, PU.specifikace, bnode))
 
-    def create_documentation(self, value, description):
-        # search dataset description for extra link to documentation
-        soup = BeautifulSoup(description, features='html.parser')
-        link = soup.find('a', text=re.compile(self.config['strings']['documentation_link'], re.I))
-
-        if link:
-            self.g.add((self.uri, FOAF.page, URIRef(link['href'])))
-            return
-
+    def create_documentation(self, value):
         if value:
             self.g.add((self.uri, FOAF.page, URIRef(value)))
 
