@@ -11,9 +11,6 @@ def build_event(src, type_matcher):
         'název': {
             'cs': src.get('name')
         },
-        'popis': {
-            'cs': src.get('text')
-        },
         'doba_trvání': [{
             'typ': 'Časová specifikace',
             'časový_interval': {
@@ -47,6 +44,13 @@ def build_event(src, type_matcher):
                 'cs': tickets,
             },
         }]
+
+    description = src.get('text')
+
+    if description:
+        ret['popis'] = {
+            'cs': description
+        }
 
     first_image = src.get('first_image')
 
