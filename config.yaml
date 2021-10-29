@@ -110,3 +110,28 @@ ofn:
     url: https://services6.arcgis.com/fUWVlHWZNxUvTUh8/arcgis/rest/services/Events/FeatureServer/0/query?where=1%3D1&outFields=*&outSR=4326&f=json
   waste:
     url: https://services6.arcgis.com/fUWVlHWZNxUvTUh8/arcgis/rest/services/sberna_strediska_odpadu/FeatureServer/0/query?where=1%3D1&outFields=*&outSR=4326&f=json
+  container:
+    url: https://services6.arcgis.com/fUWVlHWZNxUvTUh8/arcgis/rest/services/kontejnery_separovany/FeatureServer/0/query?where=1%3D1&outFields=*&outSR=4326&f=json
+    waste_mapping:
+      Papír: papír
+      Plasty: plast
+      Sklo barevné: sklo-barevné
+      Sklo bílé: sklo-bílé
+      Biologický odpad: bioodpad
+      Kovy: kov-ostatní-domácnost
+      Nápojové kartóny: kartony
+      Textil: textil
+      Sklo barevné a bílé: sklo-barevné, sklo-bílé
+      Elektro odpad: elektro-malé
+      Papír a nápojové kartony: papír, kartony
+      Plasty, nápojové kartony a hliníkové plechovky od nápojů: plast, kartony, plech-nápoje
+      Jedlé oleje a tuky: olej-jedlý
+    owners:
+      SAKO: 
+        ico: 60713470
+        name: SAKO Brno, a.s.
+      EKO-KOM:
+        ico: 25134701
+        name: EKO-KOM, a.s.
+      _brno:
+        ico: 44992785

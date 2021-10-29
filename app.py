@@ -6,6 +6,7 @@ from builder.dataset_detail import Builder
 from builder.filetypes import TypeMatcher
 from builder.event import build_event
 from builder.waste import build_waste
+from builder.container import build_container
 from datetime import timedelta
 from yaml import load, SafeLoader
 import lxml.etree as ET
@@ -115,6 +116,18 @@ def waste():
 
     for item in src.get('features'):
         res.append(build_waste(item))
+
+    return Response(dumps(res, ensure_ascii=False), mimetype='application/json')
+
+@app.route('/nkod/ofn/container.json')
+def container():
+    url = config['ofn']['container']['url']
+    src = requests.get(url).json()
+
+    res = []
+
+    for item in src.get('features'):
+        res.append(build_container(item, config['ofn']['container']))
 
     return Response(dumps(res, ensure_ascii=False), mimetype='application/json')
 
