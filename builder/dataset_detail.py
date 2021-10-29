@@ -159,7 +159,7 @@ class Builder():
             self.g.add((bnode, RDF.type, VCARD2006.Individual))
             self.g.add((bnode, VCARD2006.fn, Literal(self.config['defaults']['contact_email'], lang='cs')))
 
-        self.g.add((bnode, VCARD2006.hasEmail, Literal(email)))
+        self.g.add((bnode, VCARD2006.hasEmail, URIRef('mailto:{}'.format(email))))
         self.g.add((self.uri, DCAT.contactPoint, bnode))
 
 
