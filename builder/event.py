@@ -55,9 +55,10 @@ def build_event(src, type_matcher):
         ret['příloha'] = [{
             'typ': 'Digitální objekt',
             'url': first_image,
-            'autor_díla': [{
-                'typ': 'Příspěvková organizace města Brna',
-                'jméno': {
+            'vykonavatel_autorské_dílo': [{
+                'typ': 'Osoba',
+                'ičo': '00101460',
+                'název': {
                     'cs': 'Turisticko informační centrum (TIC)'
                 },
             }],
