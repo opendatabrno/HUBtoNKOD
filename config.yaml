@@ -1,6 +1,6 @@
 server:
   port: 5005 # Flask devel server only
-  ssl: false
+  ssl: true
 
 opendata:
   url: https://data.brno.cz/data.json
