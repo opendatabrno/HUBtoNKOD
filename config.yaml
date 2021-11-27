@@ -108,6 +108,21 @@ strings:
 ofn:
   events:
     url: https://services6.arcgis.com/fUWVlHWZNxUvTUh8/arcgis/rest/services/Events/FeatureServer/0/query?where=1%3D1&outFields=*&outSR=4326&f=json
+    category_mapping:
+      Festivaly:
+      Divadlo: divadlo
+      Hudba: koncert
+      Výstava: výstava
+      Film: kino
+      Noční život:
+      Gastronomické:
+      Veletrhy / vzdělávání: veletrh
+      Pro rodiny:
+      Sport:
+      Akce TIC Brno:
+      Mendel.Brno 2022:
+
+
   waste:
     url: https://services6.arcgis.com/fUWVlHWZNxUvTUh8/arcgis/rest/services/sberna_strediska_odpadu/FeatureServer/0/query?where=1%3D1&outFields=*&outSR=4326&f=json
   container:

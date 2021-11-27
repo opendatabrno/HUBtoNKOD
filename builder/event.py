@@ -1,9 +1,10 @@
 from datetime import datetime
 from pytz import timezone
+from json import loads
 
 tz = timezone('Europe/Prague')
 
-def build_event(src, type_matcher):
+def build_event(src, type_matcher, config):
     ret = {
         '@context': 'https://ofn.gov.cz/události/2020-07-01/kontexty/událost.jsonld',
         'typ': 'Událost',
@@ -35,6 +36,14 @@ def build_event(src, type_matcher):
         }],
     }
 
+    mail = src.get('organizer_email')
+    if mail:
+        ret['kontakt'][0]['email'] = 'mailto:%s' % mail 
+
+    name_en = src.get('name_en')
+    if name_en:
+        ret['název']['en'] = name_en
+
     tickets = src.get('tickets_info', None) or src.get('tickets', None)
 
     if tickets:
@@ -46,11 +55,16 @@ def build_event(src, type_matcher):
         }]
 
     description = src.get('text')
+    description_en = src.get('text_en')
+
+    if description or description_en:
+        ret['popis'] = {}
 
     if description:
-        ret['popis'] = {
-            'cs': description
-        }
+        ret['popis']['cs'] = description
+
+    if description_en:
+        ret['popis']['en'] = description_en
 
     first_image = src.get('first_image')
 
@@ -77,6 +91,40 @@ def build_event(src, type_matcher):
                 'obsahuje_osobní_údaje': False
             }
         }]
+
+    parent_festivals = src.get('parent_festivals')
+    if parent_festivals:
+        try:
+            festivals = loads(parent_festivals.replace("'", '"'))
+            print(parent_festivals)
+
+            name = festivals.get('name')
+            url = festivals.get('url')
+
+            if name or url:
+                ret['zaštiťující_událost'] = [{
+                    "typ": "Událost",
+                }]
+
+                if url:
+                    ret['zaštiťující_událost'][0]['iri'] = url
+                if name:
+                    ret['zaštiťující_událost'][0]['název'] = {
+                        'cs': name
+                    }
+
+        except Exception:
+            pass
+
+    categories = (src.get('categories') or '').split(',')
+    for category in categories:
+        category = category.strip()
+        category_type = config['category_mapping'].get(category)
+
+        if category and category_type:
+            ret.setdefault('typ_události', [])
+            ret['typ_události'].append('https://data.mvcr.gov.cz/zdroj/číselníky/typy-událostí/položky/%s' % category_type)
+
 
     x = float(src.get('longitude', 0))
     y = float(src.get('latitude', 0))

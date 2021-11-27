@@ -103,7 +103,7 @@ def events():
     res = []
 
     for item in src.get('features'):
-        res.append(build_event(item.get('attributes'), types_matcher))
+        res.append(build_event(item.get('attributes'), types_matcher, config['ofn']['events']))
 
     return Response(dumps(res, ensure_ascii=False), mimetype='application/json')
 
