@@ -25,5 +25,3 @@ def build_waste(src):
         }]
 
     return ret
-
-

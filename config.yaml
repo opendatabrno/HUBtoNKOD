@@ -121,8 +121,6 @@ ofn:
       Sport:
       Akce TIC Brno:
       Mendel.Brno 2022:
-
-
   waste:
     url: https://services6.arcgis.com/fUWVlHWZNxUvTUh8/arcgis/rest/services/sberna_strediska_odpadu/FeatureServer/0/query?where=1%3D1&outFields=*&outSR=4326&f=json
   container:
@@ -150,3 +148,12 @@ ofn:
         name: EKO-KOM, a.s.
       _brno:
         ico: 44992785
+  places:
+    url: https://services6.arcgis.com/fUWVlHWZNxUvTUh8/arcgis/rest/services/PLACES/FeatureServer/0/query?where=1%3D1&outFields=*&outSR=4326&f=json
+  sport:
+    url: https://services6.arcgis.com/fUWVlHWZNxUvTUh8/arcgis/rest/services/sportoviste/FeatureServer/0/query?where=1%3D1&outFields=*&outSR=4326&f=json
+    type_mapping:
+      Koupaliště, bazén: bazén
+      Fitness: posilovna
+      Sportoviště u ZŠ: tělocvična
+      Sportoviště u SŠ: tělocvična

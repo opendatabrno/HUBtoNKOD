@@ -7,6 +7,8 @@ from builder.filetypes import TypeMatcher
 from builder.event import build_event
 from builder.waste import build_waste
 from builder.container import build_container
+from builder.place import build_place
+from builder.sport import build_sport
 from datetime import timedelta
 from yaml import load, SafeLoader
 import lxml.etree as ET
@@ -128,6 +130,30 @@ def container():
 
     for item in src.get('features'):
         res.append(build_container(item, config['ofn']['container']))
+
+    return Response(dumps(res, ensure_ascii=False), mimetype='application/json')
+
+@app.route('/nkod/ofn/places.json')
+def places():
+    url = config['ofn']['places']['url']
+    src = requests.get(url).json()
+
+    res = []
+
+    for item in src.get('features'):
+        res.append(build_place(item.get('attributes'), types_matcher, config['ofn']['places']))
+
+    return Response(dumps(res, ensure_ascii=False), mimetype='application/json')
+
+@app.route('/nkod/ofn/sport.json')
+def sport():
+    url = config['ofn']['sport']['url']
+    src = requests.get(url).json()
+
+    res = []
+
+    for item in src.get('features'):
+        res.append(build_sport(item.get('attributes'), types_matcher, config['ofn']['sport']))
 
     return Response(dumps(res, ensure_ascii=False), mimetype='application/json')
 
