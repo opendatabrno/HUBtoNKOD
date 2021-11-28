@@ -1,6 +1,6 @@
 from datetime import datetime
 from pytz import timezone
-from json import loads
+from ast import literal_eval
 
 tz = timezone('Europe/Prague')
 
@@ -95,23 +95,26 @@ def build_event(src, type_matcher, config):
     parent_festivals = src.get('parent_festivals')
     if parent_festivals:
         try:
-            festivals = loads(parent_festivals.replace("'", '"'))
-            print(parent_festivals)
+            festivals = list(literal_eval(parent_festivals))
+            ret['zaštiťující_událost'] = []
 
-            name = festivals.get('name')
-            url = festivals.get('url')
+            for festival in festivals:
+                name = festival.get('name')
+                url = festival.get('url')
 
-            if name or url:
-                ret['zaštiťující_událost'] = [{
-                    "typ": "Událost",
-                }]
-
-                if url:
-                    ret['zaštiťující_událost'][0]['iri'] = url
-                if name:
-                    ret['zaštiťující_událost'][0]['název'] = {
-                        'cs': name
+                if name or url:
+                    evt = {
+                        "typ": "Událost",
                     }
+
+                    if url:
+                        evt['iri'] = url
+                    if name:
+                        evt['název'] = {
+                            'cs': name
+                        }
+                    
+                    ret['zaštiťující_událost'].append(evt)
 
         except Exception:
             pass
