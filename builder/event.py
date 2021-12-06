@@ -94,30 +94,10 @@ def build_event(src, type_matcher, config):
 
     parent_festivals = src.get('parent_festivals')
     if parent_festivals:
-        try:
-            festivals = list(literal_eval(parent_festivals))
-            ret['zaštiťující_událost'] = []
-
-            for festival in festivals:
-                name = festival.get('name')
-                url = festival.get('url')
-
-                if name or url:
-                    evt = {
-                        "typ": "Událost",
-                    }
-
-                    if url:
-                        evt['iri'] = url
-                    if name:
-                        evt['název'] = {
-                            'cs': name
-                        }
-                    
-                    ret['zaštiťující_událost'].append(evt)
-
-        except Exception:
-            pass
+        ret['zaštiťující_událost'] = [{
+            'typ': 'Událost',
+            'iri': parent_festivals
+        }]
 
     categories = (src.get('categories') or '').split(',')
     for category in categories:
