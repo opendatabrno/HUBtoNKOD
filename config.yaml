@@ -51,32 +51,43 @@ mapping:
 
   media:
     DWG:
-      mime: application/acad
-      format: OCTET
+      mime: application/dwg
+      format: DWG
     DGN:
-      mime: application/acad
-      format: OCTET
+      mime: application/octet-stream
+      format: DGN
     DXF:
-      mime: application/dxf
-      format: OCTET
+      mime: image/vnd.dxf
+      format: DXF
     SHP:
-      mime: application/zip
-      format: SHP
+      mime: application/x-shapefile
+      format: Esri Shape
     ShapeFile:
-      mime: application/zip
-      format: SHP
+      mime: application/x-shapefile
+      format: Esri Shape
     GML:
-      mime: text/sgml
+      mime: application/gml+xml
       format: GML
     CSV:
       mime: text/csv
       format: CSV
     GeoJSON:
-      mime: application/json
+      mime: application/geo+json
       format: GEOJSON
     TIFF:
       mime: image/tiff
       format: TIFF
+    JSON:
+      mime: application/json
+      format: JSON
+    JSON-LD (OFN):
+      mime: application/ld+json
+      format: JSON-LD
+
+
+    REST:
+      mime: arcgis_rest
+      format: Esri REST
 
   ignore_format:
     - "Web Page"
