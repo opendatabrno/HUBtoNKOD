@@ -168,6 +168,9 @@ class Builder():
             if not 'accessURL' in d:
                 continue
 
+            if d['accessURL'] is None:
+                continue
+
             if d['format'] in self.config['mapping']['ignore_format']:
                 continue
 
