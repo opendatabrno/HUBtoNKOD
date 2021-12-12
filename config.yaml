@@ -61,10 +61,10 @@ mapping:
       format: DXF
     SHP:
       mime: application/x-shapefile
-      format: Esri Shape
+      format: SHP
     ShapeFile:
       mime: application/x-shapefile
-      format: Esri Shape
+      format: SHP
     GML:
       mime: application/gml+xml
       format: GML
@@ -83,11 +83,9 @@ mapping:
     JSON-LD (OFN):
       mime: application/ld+json
       format: JSON-LD
-
-
     REST:
       mime: arcgis_rest
-      format: Esri REST
+      format: REST
 
   ignore_format:
     - "Web Page"
