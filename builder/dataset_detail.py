@@ -113,9 +113,8 @@ class Builder():
 
     def map_spatial(self, value):
         if value:
-            _type = self.config['mapping']['ruian'].get(value)
-            if _type:
-                self.g.add((self.uri, DCT.spatial, URIRef('https://linked.cuzk.cz/resource/ruian/{}/{}'.format(_type, value))))
+            _type = self.config['mapping']['ruian'][value]
+            self.g.add((self.uri, DCT.spatial, URIRef('https://linked.cuzk.cz/resource/ruian/{}/{}'.format(_type, value))))
 
     def map_category(self, value):
         if not type(value) == list:
