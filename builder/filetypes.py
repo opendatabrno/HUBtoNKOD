@@ -19,9 +19,9 @@ class TypeMatcher():
                 authority = search[0].find('authority-code').text
                 is_compressed = search[0].find('is-compressedFormat')
                 compressed = is_compressed is not None and is_compressed.text == "true"
-                return self.make_url(authority), compressed
+                return authority, compressed
 
-        return self.make_url('OCTET'), False
+        return 'OCTET', False
 
     def match_by_extension(self, ext):
         xpath = './/file-extension[normalize-space()=$param]/ancestor::record'

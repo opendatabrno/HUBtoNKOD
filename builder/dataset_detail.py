@@ -71,7 +71,6 @@ class Builder():
         self.map_spatial(find(s, 'metadata.dataIdInfo.dataExt.geoEle.GeoDesc.geoId.identCode'))
         self.create_contact(find(s, 'metadata.dataIdInfo.idPoC'))
         self.create_distribution(s.get('distribution', []), s)
-        self.create_online_src(find(s, 'metadata.distInfo.distTranOps.onLineSrc'), s)
         self.create_documentation(find(s, 'metadata.dataIdInfo.idCitation.otherCitDet') or find(s, 'landingPage'))
 
         return self.g
@@ -164,6 +163,7 @@ class Builder():
 
 
     def create_distribution(self, value, source):
+        types = self.config['mapping']['media']
         for d in value:
             if not 'accessURL' in d:
                 continue
@@ -176,6 +176,8 @@ class Builder():
 
             uri = URIRef(quote_url(d['accessURL']))
             is_service = False
+            fmt = None
+            media_type = None
 
             if d['format'] == 'Esri REST':
                 is_service = True
@@ -192,85 +194,34 @@ class Builder():
             if not is_service:
                 self.g.add((uri, DCAT.downloadURL, uri))
 
+
+            format_name = (d.get('title') or '').split('(')[0].strip()
+
+            if format_name in types:
+                fmt = types[format_name]['format']
+                media_type = types[format_name]['mime']
+
             # Temporary fix (bug in source system)
             mediaType = d.get('mediaType')
 
-            if not mediaType:
+            if not mediaType and not media_type:
                 if d['format'] and re.match('^\w+/[\w+]+$', d['format']):
-                    mediaType = d['format']
+                    media_type = d['format']
                 elif 'description' in d:
-                    mediaType = d['description']
+                    media_type = d['description']
                 else:
-                    mediaType = 'application/octet-stream'
+                    media_type = 'application/octet-stream'
+            elif mediaType:
+                media_type = mediaType
 
             self.g.add((uri, DCAT.accessURL, uri))
-            self.g.add((uri, DCAT.mediaType, URIRef('http://www.iana.org/assignments/media-types/{}'.format(mediaType))))
+            self.g.add((uri, DCAT.mediaType, URIRef('http://www.iana.org/assignments/media-types/{}'.format(media_type))))
 
-            fmt, compressed = self.types_matcher.find_match(d['format'], mediaType)
-            self.g.add((uri, DCT['format'], URIRef(fmt)))
+            fmt_, compressed = self.types_matcher.find_match(d['format'], media_type)
+            fmt_url = 'http://publications.europa.eu/resource/authority/file-type/{}'.format(fmt or fmt_)
+            self.g.add((uri, DCT['format'], URIRef(fmt_url)))
 
             if compressed:
-                self.g.add((uri, DCAT.compressFormat, URIRef('http://www.iana.org/assignments/media-types/{}'.format(mediaType))))
-
-            self.create_license(uri, source)
-
-    def create_online_src(self, value, source):
-        if not value:
-            return
-
-        if not isinstance(value, list):
-            value = [value]
-
-        types = self.config['mapping']['media']
-
-        for d in value:
-            if not 'linkage' in d:
-                continue
-
-            uri = URIRef(quote_url(d['linkage']))
-            is_service = False
-            mime = 'application/octet-stream'
-            fmt = 'REST'
-
-            if d['linkage'].endswith('FeatureServer') and 'orName' not in d:
-                fmt = 'REST'
-                mime = 'application/json'
-                accces_uri = self.uri + '/service'
-                is_service = True
-                self.g.add((uri, DCAT.accessService, accces_uri))
-                self.g.add((accces_uri, RDF.type, DCAT.DataService))
-                self.g.add((accces_uri, DCT.title, Literal('Esri Rest API', lang=self.lang)))
-                self.g.add((accces_uri, DCAT.endpointURL, uri))
-                self.g.add((accces_uri, DCT.conformsTo, URIRef('urn:x-esri:serviceType:ArcGIS')))
-
-
-            if 'orName' in d:
-                name = d['orName'].split('(')[0].split('-')[0].strip()
-
-                if name in types:
-                    fmt = types[name]['format']
-                    mime = types[name]['mime']
-                else:
-                    continue
-
-
-            self.g.add((self.uri, DCAT.distribution, uri))
-            self.g.add((uri, RDF.type, DCAT.Distribution))
-
-            if not is_service:
-                self.g.add((uri, DCAT.downloadURL, uri))
-
-            self.g.add((uri, DCAT.accessURL, uri))
-
-            self.g.add((uri, DCAT.mediaType, URIRef('http://www.iana.org/assignments/media-types/{}'.format(mime))))
-            self.g.add((uri, DCT['format'], URIRef('http://publications.europa.eu/resource/authority/file-type/{}'.format(fmt))))
-
-            fmt, compressed = self.types_matcher.find_match(None, mime)
-            if compressed:
-                self.g.add((uri, DCAT.compressFormat, URIRef('http://www.iana.org/assignments/media-types/{}'.format(mime))))
-
-            # last attempt to recognize compression
-            if not compressed and d['linkage'].endswith('.zip') :
-                self.g.add((uri, DCAT.compressFormat, URIRef('http://www.iana.org/assignments/media-types/application/zip')))
+                self.g.add((uri, DCAT.compressFormat, URIRef('http://www.iana.org/assignments/media-types/{}'.format(media_type))))
 
             self.create_license(uri, source)
