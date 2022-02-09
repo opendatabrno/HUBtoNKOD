@@ -146,8 +146,8 @@ def build_place(src, type_matcher, config):
             pass
 
 
-    x = float(src.get('longitude', 0))
-    y = float(src.get('latitude', 0))
+    x = float(src.get('longitude') or 0)
+    y = float(src.get('latitude') or 0)
     address = src.get('address')
 
     if (x and y) or address:
