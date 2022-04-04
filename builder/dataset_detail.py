@@ -197,6 +197,10 @@ class Builder():
 
             format_name = (d.get('title') or '').split('(')[0].strip()
 
+            if d.get('title'):
+                self.g.add((uri, DCT.title, Literal(d['title'], lang=self.lang)))
+
+
             if format_name in types:
                 fmt = types[format_name]['format']
                 media_type = types[format_name]['mime']
