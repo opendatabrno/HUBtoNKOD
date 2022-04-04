@@ -228,4 +228,17 @@ class Builder():
             if compressed:
                 self.g.add((uri, DCAT.compressFormat, URIRef('http://www.iana.org/assignments/media-types/{}'.format(media_type))))
 
+            description = d.get('description')
+            if description:
+                ofn_url_test = r"https://ofn.gov.cz[^\s]+"
+
+                res = re.search(ofn_url_test, description)
+
+                if res:
+                    self.g.add((uri, DCT.conformsTo, URIRef(res[0])))
+
+                # if description contains more than just ofn uri, use it as description
+                if not re.match(ofn_url_test, description):
+                    self.g.add((uri, DCT.description, Literal(description)))
+
             self.create_license(uri, source)
