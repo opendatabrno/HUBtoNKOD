@@ -92,6 +92,7 @@ mapping:
 
   ignore_format:
     - "Web Page"
+    - "Web"
 
   license:
     'CC0': 'https://creativecommons.org/publicdomain/zero/1.0/'
