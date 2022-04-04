@@ -83,6 +83,9 @@ mapping:
     JSON-LD (OFN):
       mime: application/ld+json
       format: JSON-LD
+    JSON-LD (Otevřená formální norma):
+      mime: application/ld+json
+      format: JSON-LD
     REST:
       mime: arcgis_rest
       format: REST
