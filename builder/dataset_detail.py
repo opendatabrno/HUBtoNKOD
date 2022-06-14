@@ -236,6 +236,7 @@ class Builder():
 
                 if res:
                     self.g.add((uri, DCT.conformsTo, URIRef(res[0])))
+                    self.g.add((self.uri, DCT.conformsTo, URIRef(res[0])))
 
                 # if description contains more than just ofn uri, use it as description
                 if not re.match(ofn_url_test, description):
