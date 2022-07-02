@@ -108,7 +108,7 @@ def events():
     for item in src.get('features'):
         res.append(build_event(item.get('attributes'), types_matcher, config['ofn']['events']))
 
-    return Response(dumps(res, ensure_ascii=False), mimetype='application/json')
+    return Response(dumps(res, ensure_ascii=False), mimetype='application/ld+json')
 
 @app.route('/nkod/ofn/waste.json')
 def waste():
@@ -120,7 +120,7 @@ def waste():
     for item in src.get('features'):
         res.append(build_waste(item))
 
-    return Response(dumps(res, ensure_ascii=False), mimetype='application/json')
+    return Response(dumps(res, ensure_ascii=False), mimetype='application/ld+json')
 
 @app.route('/nkod/ofn/container.json')
 def container():
@@ -132,7 +132,7 @@ def container():
     for item in src.get('features'):
         res.append(build_container(item, config['ofn']['container']))
 
-    return Response(dumps(res, ensure_ascii=False), mimetype='application/json')
+    return Response(dumps(res, ensure_ascii=False), mimetype='application/ld+json')
 
 @app.route('/nkod/ofn/places.json')
 def places():
@@ -144,7 +144,7 @@ def places():
     for item in src.get('features'):
         res.append(build_place(item.get('attributes'), types_matcher, config['ofn']['places']))
 
-    return Response(dumps(res, ensure_ascii=False), mimetype='application/json')
+    return Response(dumps(res, ensure_ascii=False), mimetype='application/ld+json')
 
 @app.route('/nkod/ofn/sport.json')
 def sport():
@@ -156,7 +156,7 @@ def sport():
     for item in src.get('features'):
         res.append(build_sport(item.get('attributes'), types_matcher, config['ofn']['sport']))
 
-    return Response(dumps(res, ensure_ascii=False), mimetype='application/json')
+    return Response(dumps(res, ensure_ascii=False), mimetype='application/ld+json')
 
 
 if __name__ == '__main__':
