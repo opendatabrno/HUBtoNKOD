@@ -7,6 +7,7 @@ chardet==3.0.4
 click==7.1.2
 constantly==15.1.0
 Flask==1.1.2
+Flask-Cors==3.0.10
 hyperlink==20.0.1
 idna==2.9
 incremental==17.5.0

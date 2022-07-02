@@ -15,9 +15,10 @@ import lxml.etree as ET
 from functools import wraps
 from werkzeug.exceptions import NotAcceptable
 from json import dumps
+from flask_cors import CORS
 
 app = Flask(__name__)
-
+CORS(app)
 
 with open('config.yaml', 'r') as c:
     config = load(c, Loader=SafeLoader)
