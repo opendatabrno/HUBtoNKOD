@@ -16,6 +16,7 @@ from functools import wraps
 from werkzeug.exceptions import NotAcceptable
 from json import dumps
 from flask_cors import CORS
+from utils import get_dataset_id
 
 app = Flask(__name__)
 CORS(app)
@@ -91,7 +92,7 @@ def detail(dataset, return_mime, format, extension):
         url = url.replace('http://', 'https://')
 
     for d in src['dataset']:
-        dataset_id = d['identifier'].split('/')[-1]
+        dataset_id = get_dataset_id(d['identifier'])
         if dataset_id == dataset:
             builder = Builder(d, url, config, types_matcher).create_dataset()
             return Response(builder.serialize(format=format), mimetype=return_mime)

@@ -1,6 +1,7 @@
 from rdflib import Graph, URIRef, Namespace, Literal
 from rdflib.namespace import DCAT, RDF
 from builder.dataset_detail import find
+from utils import get_dataset_id
 
 DCT = Namespace("http://purl.org/dc/terms/")
 
@@ -38,7 +39,7 @@ def dataset_list(src, url, base, config, extension):
         if len(onLineSrc) == 0 and len(distributions) == 0:
             continue
 
-        dataset_id = dataset['identifier'].split('/')[-1]
+        dataset_id = get_dataset_id(dataset['identifier'])
         dataset_uri = '{}nkod/dataset/{}{}'.format(base, dataset_id, extension)
         g.add((uri, DCAT.dataset, URIRef(dataset_uri)))
 
