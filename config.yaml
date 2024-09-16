@@ -1,6 +1,6 @@
 server:
   port: 5005 # Flask devel server only
-  ssl: true
+  ssl: false
 
 opendata:
   url: https://data.brno.cz/data.json
@@ -98,6 +98,7 @@ mapping:
     'CC0': 'https://creativecommons.org/publicdomain/zero/1.0/'
     'CC BY': 'https://creativecommons.org/licenses/by/4.0/'
     'CC BY-SA': 'https://creativecommons.org/licenses/by-sa/4.0/'
+    'CC BY-NC': 'https://creativecommons.org/licenses/by-nc/4.0/'
 
   ruian:
     582786: obec
